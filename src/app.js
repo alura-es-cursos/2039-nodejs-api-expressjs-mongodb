@@ -1,28 +1,26 @@
 import express from "express";
+import conectaBaseDeDatos from "./config/conexionDB.js";
+import libroModel from "./models/libros.js";
 const app = express();
 app.use(express.json());
 
-const librosActuales = [
-    {
-        id: 1,
-        titulo:"El señor de los anillos",
-    },
-    {
-        id: 2,
-        titulo:"Don Quijote",
-    },
-];
+const db = await conectaBaseDeDatos();
 
-const buscaLibro = (id) => {
-    return librosActuales.findIndex((libro) => libro.id === id);
-}
+db.on('error',(error) => {
+    console.log('Error en la conexión',error);
+});
+
+db.once('open', () => {
+    console.log("Conexión a la base de datos exitosa");
+});
 
 app.get('/',(req,res) => {
     res.status(200).send('Formacion Node + Express + MongoDB con servidor Express');
 });
 
-app.get('/libros',(req,res) => {
-    res.status(200).json(librosActuales);
+app.get('/libros',async (req,res) => {
+    const listaLibros = await libroModel.find({});
+    res.status(200).json(listaLibros);
 });
 
 app.get('/libros/:id',(req,res) => {
@@ -50,3 +48,4 @@ app.delete('/libros/:id', (req, res) => {
 
 
 export default app;
+
