@@ -1,18 +1,6 @@
-import http from 'http';
+import app from './src/app.js';
+const PORT = 3000;
 
-const rutas = {
-    '/': 'Formacion Node + Express + MongoDB',
-    '/autores' : 'Estos son los autores',
-    '/libros' : 'Estos son los libros',
-    '/categorias' : '<strong>Estas son las categorias</strong>'
-}
-
-const server = http.createServer((req,res) => {
-    console.log(req.url);
-    res.writeHead(200, {"Content-Type":"text/html"});
-    res.end(rutas[req.url]);
-});
-
-server.listen(3000, () => {
+app.listen(PORT, () => {
     console.log('Servidor iniciado');
 });
